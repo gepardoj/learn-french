@@ -1,59 +1,26 @@
 <script lang="ts">
-	import Counter from './Counter.svelte';
-	import welcome from '$lib/images/svelte-welcome.webp';
-	import welcomeFallback from '$lib/images/svelte-welcome.png';
+	import Button from "../stories/Button.svelte";
+	import { gameStore, type Difficulty } from "../stores/stores";
+	import Game from "./Game.svelte";
+
+	const start = (diff: Difficulty) => {
+		gameStore.start(diff);
+	};
 </script>
 
-<svelte:head>
-	<title>Home</title>
-	<meta name="description" content="Svelte demo app" />
-</svelte:head>
-
-<section>
-	<h1>
-		<span class="welcome">
-			<picture>
-				<source srcset={welcome} type="image/webp" />
-				<img src={welcomeFallback} alt="Welcome" />
-			</picture>
-		</span>
-
-		to your new<br />SvelteKit app
-	</h1>
-
-	<h2>
-		try editing <strong>src/routes/+page.svelte</strong>
-	</h2>
-
-	<Counter />
-</section>
+{#if $gameStore.gameState === "home"}
+	<section class="flex flex-[0.3] flex-col justify-center self-center gap-3">
+		<h1>Learn French</h1>
+		<Button onclick={() => start("easy")} label="Easy. Match words" />
+		<Button
+			onclick={() => start("medium")}
+			label="Medium. Construct sentences"
+		/>
+		<Button onclick={() => start("hard")} label="Hard. Writing sentences" />
+	</section>
+{:else if $gameStore.gameState === "in_game"}
+	<Game />
+{/if}
 
 <style>
-	section {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		flex: 0.6;
-	}
-
-	h1 {
-		width: 100%;
-	}
-
-	.welcome {
-		display: block;
-		position: relative;
-		width: 100%;
-		height: 0;
-		padding: 0 0 calc(100% * 495 / 2048) 0;
-	}
-
-	.welcome img {
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		top: 0;
-		display: block;
-	}
 </style>
