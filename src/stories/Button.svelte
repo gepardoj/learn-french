@@ -1,6 +1,4 @@
 <script lang="ts">
-  import "./button.css";
-
   interface Props {
     /** Is this the principal call to action on the page? */
     variant?: "primary" | "success" | "error";
@@ -24,6 +22,22 @@
     label,
     ...props
   }: Props = $props();
+  function getClassName() {
+    let className = "bg-gray-100";
+    switch (variant) {
+      case "primary":
+        className = "bg-primary text-white";
+        break;
+      case "success":
+        className = "bg-success";
+        break;
+      case "error":
+        className = "bg-error";
+        break;
+    }
+    if (disabled) className = "bg-disabled";
+    return className;
+  }
 </script>
 
 <button
@@ -32,13 +46,8 @@
   {disabled}
   class={[
     props.class,
-    "bg-amber-50",
-    variant === "primary" ? "bg-primary text-white" : "",
-    variant === "success" ? "bg-success" : "",
-    variant === "error" ? "bg-error" : "",
-    disabled ? "bg-disabled" : "",
-    "storybook-button",
-    `storybook-button--${size}`,
+    getClassName(),
+    "rounded-xl text-lg p-2 shadow-2xs",
   ].join(" ")}
 >
   {label}

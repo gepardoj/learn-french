@@ -4,6 +4,7 @@
   import CloseSvg from "../lib/images/close.svg?raw";
   import { words } from "./words";
   import { gameStore } from "../stores/stores";
+  import ProgressBar from "../stories/ProgressBar.svelte";
 
   type ConfirmButtonState = "check" | "error" | "success";
 
@@ -16,16 +17,23 @@
     choosen_variant = i;
   };
   const check = () => {
-    confirm_button_state =
-      question_fr(room) === _4variants[choosen_variant][0]
-        ? "success"
-        : "error";
+    if (question_fr(room) === _4variants[choosen_variant][0]) {
+      question_state = "success";
+    } else {
+      question_state = "error";
+      errors++;
+    }
+    percentAnswered = ((room + 1) / MAX_ROOM) * 100;
   };
   const next = () => {
     room++;
+
+    if (room >= MAX_ROOM) {
+      $gameStore.gameState = "result";
+    }
     _4variants = sortFor4Variants(room);
     choosen_variant = -1;
-    confirm_button_state = "check";
+    question_state = "check";
   };
   const fr = (i: number) => sortedWords[i][0];
   const question_fr = (i: number) => sortedWords[i * WORDS_IN_ROOM][0];
@@ -39,18 +47,22 @@
   const WORDS_IN_ROOM = 4 as const;
 
   let room = 0;
+  let percentAnswered = 5;
   let errors = 0;
   let choosen_variant = -1;
-  let confirm_button_state: ConfirmButtonState = "check";
+  let question_state: ConfirmButtonState = "check";
   const sortedWords = words.toSorted(() => (Math.random() > 0.5 ? 1 : -1));
   let _4variants: string[][] = [];
   console.log(sortedWords);
   _4variants = sortFor4Variants(room);
 </script>
 
-<ButtonIcon onclick={close} icon={CloseSvg} alt="Close" />
-<section class="flex flex-1 flex-col justify-center self-center gap-3">
-  <h2 class="text-center">{question_fr(room)}</h2>
+<div class="flex gap-6 items-center">
+  <ButtonIcon onclick={close} icon={CloseSvg} alt="Close" />
+  <ProgressBar percent={percentAnswered} />
+</div>
+<section class="flex flex-1 mt-10 flex-col justify-center gap-3">
+  <h2 class="text-3xl text-center">{question_fr(room)}</h2>
   {#each _4variants as _, i (_[1])}
     <Button
       onclick={() => choose_variant(i)}
@@ -60,16 +72,16 @@
   {/each}
   <Button
     class="mt-auto"
-    onclick={() => (confirm_button_state === "check" ? check() : next())}
-    variant={confirm_button_state === "success"
+    onclick={() => (question_state === "check" ? check() : next())}
+    variant={question_state === "success"
       ? "success"
-      : confirm_button_state === "error"
+      : question_state === "error"
         ? "error"
         : undefined}
     disabled={choosen_variant === -1}
-    label={confirm_button_state === "success"
+    label={question_state === "success"
       ? "Continue"
-      : confirm_button_state === "error"
+      : question_state === "error"
         ? "Got it"
         : "Check"}
   />

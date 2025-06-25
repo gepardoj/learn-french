@@ -1,6 +1,6 @@
 import { writable } from "svelte/store";
 
-type State = "home" | "in_game";
+type State = "home" | "in_game" | "result";
 export type Difficulty = "easy" | "medium" | "hard";
 
 type Store = {

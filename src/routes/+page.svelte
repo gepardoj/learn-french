@@ -9,8 +9,8 @@
 </script>
 
 {#if $gameStore.gameState === "home"}
-	<section class="flex flex-[0.3] flex-col justify-center self-center gap-3">
-		<h1>Learn French</h1>
+	<section class="flex flex-[0.3] flex-col justify-center gap-3">
+		<h1 class="text-3xl text-center">Learn French</h1>
 		<Button onclick={() => start("easy")} label="Easy. Match words" />
 		<Button
 			onclick={() => start("medium")}
