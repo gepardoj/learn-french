@@ -3,7 +3,7 @@
   import ButtonIcon from "../stories/ButtonIcon.svelte";
   import CloseSvg from "../lib/images/close.svg?raw";
   import { words } from "./words";
-  import { gameStore } from "../stores/stores";
+  import { gameStore, MAX_ROOM, WORDS_IN_ROOM } from "../stores/stores";
   import ProgressBar from "../stories/ProgressBar.svelte";
 
   type ConfirmButtonState = "check" | "error" | "success";
@@ -29,7 +29,7 @@
     room++;
 
     if (room >= MAX_ROOM) {
-      $gameStore.gameState = "result";
+      gameStore.finish(errors);
     }
     _4variants = sortFor4Variants(room);
     choosen_variant = -1;
@@ -42,9 +42,6 @@
     sortedWords
       .slice(i * WORDS_IN_ROOM, (i + 1) * WORDS_IN_ROOM)
       .toSorted(() => (Math.random() > 0.5 ? 1 : -1));
-
-  const MAX_ROOM = 10 as const;
-  const WORDS_IN_ROOM = 4 as const;
 
   let room = 0;
   let percentAnswered = 5;

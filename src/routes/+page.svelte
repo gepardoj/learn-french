@@ -2,6 +2,7 @@
 	import Button from "../stories/Button.svelte";
 	import { gameStore, type Difficulty } from "../stores/stores";
 	import Game from "./Game.svelte";
+	import Result from "./Result.svelte";
 
 	const start = (diff: Difficulty) => {
 		gameStore.start(diff);
@@ -20,6 +21,8 @@
 	</section>
 {:else if $gameStore.gameState === "in_game"}
 	<Game />
+{:else if $gameStore.gameState === "result"}
+	<Result />
 {/if}
 
 <style>
