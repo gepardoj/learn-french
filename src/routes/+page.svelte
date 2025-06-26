@@ -13,11 +13,11 @@
 	<section class="flex flex-[0.3] flex-col justify-center gap-3">
 		<h1 class="text-3xl text-center">Learn French</h1>
 		<Button onclick={() => start("easy")} label="Easy. Match words" />
-		<Button
+		<!-- <Button
 			onclick={() => start("medium")}
 			label="Medium. Construct sentences"
 		/>
-		<Button onclick={() => start("hard")} label="Hard. Writing sentences" />
+		<Button onclick={() => start("hard")} label="Hard. Writing sentences" /> -->
 	</section>
 {:else if $gameStore.gameState === "in_game"}
 	<Game />
